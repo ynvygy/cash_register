@@ -1,9 +1,9 @@
 require_relative '../cash_register'
 
 describe CashRegister do
-  it 'should be instantiated with a starting balance of 0' do
+  it 'should return a total sum of 0 if nothing was added' do
     cash_register = CashRegister.new
-    expect(cash_register.balance).to eq(0)
+    expect { cash_register.show_total }.to output("The total is 0.00\n").to_stdout
   end
 
   describe '#add_item' do
@@ -19,7 +19,7 @@ describe CashRegister do
       cash_register.add_item
 
       # Expect the total to be the sum of the prices
-      expect(cash_register.show_total).to eq(3.11)
+      expect { cash_register.show_total }.to output("The total is 3.11\n").to_stdout
     end
 
     it 'adds SR1 three times and GR1 once and shows the total correctly (Test Data Amenitiz #2)' do
@@ -42,7 +42,7 @@ describe CashRegister do
       cash_register.add_item
 
       # Expect the total to be the sum of the prices
-      expect(cash_register.show_total).to eq(16.61)
+      expect { cash_register.show_total }.to output("The total is 16.61\n").to_stdout
     end
 
     it 'adds CF1 three times and GR1 and SR1 both once and shows the total correctly (Test Data Amenitiz #3)' do
@@ -69,7 +69,7 @@ describe CashRegister do
       cash_register.add_item
 
       # Expect the total to be the sum of the prices
-      expect(cash_register.show_total).to eq(30.57)
+      expect { cash_register.show_total }.to output("The total is 30.57\n").to_stdout
     end
   end
 end
