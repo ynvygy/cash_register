@@ -1,8 +1,12 @@
+require 'pry'
+require_relative 'item'
+
 class CashRegister
   attr_reader :items
 
   def initialize
     @items = []
+    @item_list = Item.instance
   end
 
   def add_item
@@ -12,10 +16,12 @@ class CashRegister
     @items << item
 
     puts "#{item} added to the cash register."
+    puts "Current items: #{@items}"
   end
 
   def show_total
-    total = @items.sum { |item| 1 }
+    total = @items.sum { |item| @item_list.get_price(item).to_f }
+    puts "The total is #{sprintf("%.2f", total)}"
   end
 
   def display_menu
