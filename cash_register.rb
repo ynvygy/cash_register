@@ -1,5 +1,7 @@
 require 'pry'
 require_relative 'item'
+require_relative 'item_discount'
+require_relative 'discount'
 
 class CashRegister
   attr_reader :items
@@ -7,6 +9,7 @@ class CashRegister
   def initialize
     @items = []
     @item_list = Item.instance
+    @item_discount = ItemDiscount.instance
   end
 
   def add_item
@@ -20,8 +23,23 @@ class CashRegister
   end
 
   def show_total
-    total = @items.sum { |item| @item_list.get_price(item).to_f }
+    total = get_item_count.sum do |item, value|
+      item_price = @item_list.get_price(item).to_f
+      item_discounts = @item_discount.get_discount(item)
+      item_discounts.sum do |discount|
+        Discount.get_discount(discount, item_price, value)
+      end
+    end
+
     puts "The total is #{sprintf("%.2f", total)}"
+  end
+
+  def get_item_count
+    item_counts = Hash.new(0)
+
+    items.each { |item| item_counts[item] += 1 }
+
+    item_counts
   end
 
   def display_menu
