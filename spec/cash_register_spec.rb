@@ -15,7 +15,7 @@ describe CashRegister do
     expect { cash_register.show_total }.to output(expected_output).to_stdout
   end
 
-  describe '#add_item' do
+  describe '#show_total' do
     it 'adds GR1 twice and shows the total correctly (Test Data Amenitiz #1)' do
       add_items(["GR1", "GR1"])
       expect_total_output("The total is 3.11\n")
@@ -29,6 +29,26 @@ describe CashRegister do
     it 'adds CF1 three times and GR1 and SR1 both once and shows the total correctly (Test Data Amenitiz #3)' do
       add_items(["GR1", "CF1", "SR1", "CF1", "CF1"])
       expect_total_output("The total is 30.57\n")
+    end
+
+    it 'adds GR1 eight times and shows the total correctly' do
+      add_items(["GR1", "GR1", "GR1", "GR1", "GR1", "GR1", "GR1", "GR1"])
+      expect_total_output("The total is 12.44\n")
+    end
+
+    it 'adds SR1 eight times and shows the total correctly' do
+      add_items(["SR1", "SR1", "SR1", "SR1", "SR1", "SR1", "SR1", "SR1"])
+      expect_total_output("The total is 36.00\n")
+    end
+
+    it 'adds CF1 eight times and shows the total correctly' do
+      add_items(["CF1", "CF1", "CF1", "CF1", "CF1", "CF1", "CF1", "CF1"])
+      expect_total_output("The total is 59.89\n")
+    end
+
+    it 'adds nothing and expects 0' do
+      add_items([])
+      expect_total_output("The total is 0.00\n")
     end
   end
 end
