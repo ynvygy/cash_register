@@ -11,8 +11,8 @@ describe ItemDiscount do
         'GR1' => [
           {
             'discount_type' => 'buy_n_get_n_free',
-            'buy_quantity' => 2,
-            'get_quantity' => 1
+            'buy_quantity' => 1,
+            'get_quantity' => 2
           }
         ],
         'SR1' => [
@@ -41,8 +41,8 @@ describe ItemDiscount do
         expect(discounts).to eq([
           {
             'discount_type' => 'buy_n_get_n_free',
-            'buy_quantity' => 2,
-            'get_quantity' => 1
+            'buy_quantity' => 1,
+            'get_quantity' => 2
           }
         ])
       end

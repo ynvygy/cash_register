@@ -1,13 +1,19 @@
 class ItemDiscount
   attr_reader :discounts
 
+  @@instance = nil
+
+  def self.instance
+    @@instance ||= new
+  end
+
   def initialize
     @discounts = {
       'GR1' => [
         {
           "discount_type" => 'buy_n_get_n_free',
-          "buy_quantity" => 2,
-          "get_quantity" => 1
+          "buy_quantity" => 1,
+          "get_quantity" => 2
         }
       ],
       'SR1' => [
@@ -21,7 +27,7 @@ class ItemDiscount
         {
           "discount_type" => 'buy_multiple_calculated_price',
           "minimum_amount" => 3,
-          "fixed_price" => 2/3.to_f
+          "percentage_price" => 2/3.to_f
         }
       ]
     }
