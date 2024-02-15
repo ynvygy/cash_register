@@ -1,30 +1,52 @@
 class Discount
-  def self.get_discount(item_discounts, item_price, count)
-    case item_discounts['discount_type']
+  def initialize(item_discount, item_price, count)
+    @item_discount = item_discount
+    @item_price = item_price
+    @count = count
+  end
+
+  def get_discount
+    case @item_discount['discount_type']
     when 'buy_n_get_n_free'
-      buy_n_get_n_free(item_discounts, item_price, count)
+      buy_n_get_n_free
     when 'buy_multiple_fixed_price'
-      buy_multiple_fixed_price(item_discounts, item_price, count)
+      buy_multiple_fixed_price
     when 'buy_multiple_calculated_price'
-      buy_multiple_calculated_price(item_discounts, item_price, count)
+      buy_multiple_calculated_price
     else
-      raise ArgumentError, "Invalid discount type: #{item_discounts['discount_type']}"
+      raise ArgumentError, "Invalid discount type: #{@item_discount['discount_type']}"
     end
   end
 
-  def self.buy_n_get_n_free(item_discounts, item_price, count)
-    (count / item_discounts['get_quantity']) * (item_discounts['buy_quantity'] * item_price).round(2) + (count % item_discounts['get_quantity']) * item_price
+  def buy_n_get_n_free
+    get_number_of_sets * get_discounted_quantity.round(2) + get_number_of_leftovers * @item_price
   end
 
-  def self.buy_multiple_fixed_price(item_discounts, item_price, count)
-    return count * item_price if count < item_discounts['minimum_amount']
+  def buy_multiple_fixed_price
+    return get_count_times_price if @count < @item_discount['minimum_amount']
 
-    (count * item_discounts['fixed_price']).round(2)
+    (@count * @item_discount['fixed_price']).round(2)
   end
 
-  def self.buy_multiple_calculated_price(item_discounts, item_price, count)
-    return count * item_price if count < item_discounts['minimum_amount']
+  def buy_multiple_calculated_price
+    return get_count_times_price if @count < @item_discount['minimum_amount']
 
-    (count * item_price * item_discounts['percentage_price']).round(2)
+    (get_count_times_price * @item_discount['percentage_price']).round(2)
+  end
+
+  def get_number_of_sets
+    @count / @item_discount['get_quantity']
+  end
+
+  def get_number_of_leftovers
+    @count % @item_discount['get_quantity']
+  end
+
+  def get_discounted_quantity
+    @item_discount['buy_quantity'] * @item_price
+  end
+
+  def get_count_times_price
+    @count * @item_price
   end
 end

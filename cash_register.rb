@@ -27,7 +27,7 @@ class CashRegister
       item_price = @item_list.get_price(item).to_f
       item_discounts = @item_discount.get_discount(item)
       item_discounts.sum do |discount|
-        Discount.get_discount(discount, item_price, value)
+        Discount.new(discount, item_price, value).get_discount
       end
     end
 
