@@ -3,32 +3,45 @@ require_relative '../discount'
 describe Discount do
   describe '#buy_n_get_n_free' do
     it 'calculates the total price after buy-n-get-n-free discount' do
-      quantity_to_buy = 2
-      quantity_to_get_free = 1
-      price_per_item = 3.11
+      item_discounts = {
+        'discount_type' => 'buy_n_get_n_free',
+        'buy_quantity' => 1,
+        'get_quantity' => 2
+      }
+      item_price = 3.11
+      count = 3
 
-      total_price = Discount.buy_n_get_n_free(quantity_to_buy, quantity_to_get_free, price_per_item)
+      total_price = Discount.get_discount(item_discounts, item_price, count)
       expect(total_price).to eq(6.22)
     end
   end
 
   describe '#buy_multiple_fixed_price' do
     it 'calculates the total cost for buying multiple items' do
-      quantity = 3
-      price_per_item = 4.50
+      item_discounts = {
+        'discount_type' => 'buy_multiple_fixed_price',
+        'minimum_amount' => 3,
+        'fixed_price' => 4.50
+      }
 
-      total_cost = Discount.buy_multiple_fixed_price(quantity, price_per_item)
+      item_price = 5
+
+      total_cost = Discount.buy_multiple_fixed_price(item_discounts, item_price, 3)
       expect(total_cost).to eq(13.50)
     end
   end
 
   describe '#buy_multiple_calculated_price' do
     it 'calculates the total cost for buying multiple items' do
-      quantity = 3
-      price_per_item = 11.23
-      percentage_price = 2/3.to_f
+      item_discounts = {
+        'discount_type' => 'buy_multiple_fixed_price',
+        'minimum_amount' => 3,
+        'percentage_price' => 2/3.to_f
+      }
 
-      total_cost = Discount.buy_multiple_calculated_price(quantity, price_per_item, percentage_price)
+      item_price = 11.23
+
+      total_cost = Discount.buy_multiple_calculated_price(item_discounts, item_price, 3)
       expect(total_cost).to eq(22.46)
     end
   end

@@ -16,6 +16,7 @@ describe CashRegister do
   end
 
   describe '#show_total' do
+    # Amenitiz test cases
     it 'adds GR1 twice and shows the total correctly (Test Data Amenitiz #1)' do
       add_items(["GR1", "GR1"])
       expect_total_output("The total is 3.11\n")
@@ -31,6 +32,7 @@ describe CashRegister do
       expect_total_output("The total is 30.57\n")
     end
 
+    # Tests for eight items of each
     it 'adds GR1 eight times and shows the total correctly' do
       add_items(["GR1", "GR1", "GR1", "GR1", "GR1", "GR1", "GR1", "GR1"])
       expect_total_output("The total is 12.44\n")
@@ -46,11 +48,13 @@ describe CashRegister do
       expect_total_output("The total is 59.89\n")
     end
 
+    # Test for no items
     it 'adds nothing and expects 0' do
       add_items([])
       expect_total_output("The total is 0.00\n")
     end
 
+    # Tests for one item each
     it 'adds GR1 eight times and shows the total correctly' do
       add_items(["GR1"])
       expect_total_output("The total is 3.11\n")
