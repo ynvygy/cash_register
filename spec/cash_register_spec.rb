@@ -50,5 +50,20 @@ describe CashRegister do
       add_items([])
       expect_total_output("The total is 0.00\n")
     end
+
+    it 'adds GR1 eight times and shows the total correctly' do
+      add_items(["GR1"])
+      expect_total_output("The total is 3.11\n")
+    end
+
+    it 'adds SR1 eight times and shows the total correctly' do
+      add_items(["SR1"])
+      expect_total_output("The total is 5.00\n")
+    end
+
+    it 'adds CF1 eight times and shows the total correctly' do
+      add_items(["CF1"])
+      expect_total_output("The total is 11.23\n")
+    end
   end
 end
