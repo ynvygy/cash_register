@@ -26,7 +26,7 @@ describe ItemDiscount do
           {
             'discount_type' => 'buy_multiple_calculated_price',
             'minimum_amount' => 3,
-            'fixed_price' => 2 / 3.to_f
+            'percentage_price' => 2 / 3.to_f
           }
         ]
       )
@@ -66,7 +66,7 @@ describe ItemDiscount do
           {
             'discount_type' => 'buy_multiple_calculated_price',
             'minimum_amount' => 3,
-            'fixed_price' => 2 / 3.to_f
+            'percentage_price' => 2 / 3.to_f
           }
         ])
       end
