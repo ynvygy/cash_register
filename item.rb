@@ -16,4 +16,8 @@ class Item
   def get_price(item)
     @item_prices[item]
   end
+
+  def item_list
+    @item_prices.keys
+  end
 end

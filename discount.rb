@@ -1,8 +1,8 @@
 class Discount
-  def initialize(item_discount, item_price, count)
+  def initialize(item_discount, item_price, quantity)
     @item_discount = item_discount
     @item_price = item_price
-    @count = count
+    @quantity = quantity
   end
 
   def get_discount
@@ -23,23 +23,23 @@ class Discount
   end
 
   def buy_multiple_fixed_price
-    return get_count_times_price if @count < @item_discount['minimum_amount']
+    return get_count_times_price if @quantity < @item_discount['minimum_amount']
 
-    (@count * @item_discount['fixed_price']).round(2)
+    (@quantity * @item_discount['fixed_price']).round(2)
   end
 
   def buy_multiple_calculated_price
-    return get_count_times_price if @count < @item_discount['minimum_amount']
+    return get_count_times_price if @quantity < @item_discount['minimum_amount']
 
     (get_count_times_price * @item_discount['percentage_price']).round(2)
   end
 
   def get_number_of_sets
-    @count / @item_discount['get_quantity']
+    @quantity / @item_discount['get_quantity']
   end
 
   def get_number_of_leftovers
-    @count % @item_discount['get_quantity']
+    @quantity % @item_discount['get_quantity']
   end
 
   def get_discounted_quantity
@@ -47,6 +47,6 @@ class Discount
   end
 
   def get_count_times_price
-    @count * @item_price
+    @quantity * @item_price
   end
 end

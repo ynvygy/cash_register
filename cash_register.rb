@@ -2,36 +2,48 @@ require 'pry'
 require_relative 'item'
 require_relative 'item_discount'
 require_relative 'discount'
+require 'yaml'
 
 class CashRegister
   attr_reader :items
 
+  CONFIG = YAML.load_file('config.yml')
+
   def initialize
     @items = []
-    @item_list = Item.instance
-    @item_discount = ItemDiscount.instance
+    @item = Item.new
+    @item_discount = ItemDiscount.new
   end
 
   def add_item
-    puts "Enter the name of the item: "
-    item = gets.chomp
+    item = nil
+    loop do
+      puts format(CONFIG['choices_prompt'], choices: format_choices)
+      item = gets.chomp
+
+      break if get_choices.include?(item)
+
+      puts format(CONFIG['invalid_prompt'], choices: format_choices)
+    end
 
     @items << item
 
-    puts "#{item} added to the cash register."
-    puts "Current items: #{@items}"
+    puts format(CONFIG['item_added_message'], item: item)
+    puts format(CONFIG['current_items_message'], items: @items.join(', '))
+  end
+
+  def calculate_total
+    get_item_count.sum do |item, value|
+      item_price = @item.get_price(item).to_f
+      item_discounts = @item_discount.get_discount(item)
+      item_discounts.sum { |discount|
+        Discount.new(discount, item_price, value).get_discount
+      }
+    end
   end
 
   def show_total
-    total = get_item_count.sum do |item, value|
-      item_price = @item_list.get_price(item).to_f
-      item_discounts = @item_discount.get_discount(item)
-      item_discounts.sum do |discount|
-        Discount.new(discount, item_price, value).get_discount
-      end
-    end
-
-    puts "The total is #{sprintf("%.2f", total)}"
+    puts format(CONFIG['total_message'], total: sprintf("%.2f", calculate_total))
   end
 
   def get_item_count
@@ -43,10 +55,10 @@ class CashRegister
   end
 
   def display_menu
-    puts "Menu:"
-    puts "1. Add Item"
-    puts "2. Show Total"
-    puts "3. Quit"
+    puts CONFIG['menu_header']
+    puts CONFIG['add_item_option']
+    puts CONFIG['show_total_option']
+    puts CONFIG['quit_option']
   end
 
   def process_menu_choice(choice)
@@ -56,20 +68,28 @@ class CashRegister
     when 2
       show_total
     when 3
-      puts "Exiting the cash register. Thank you!"
+      puts CONFIG['exit_message']
       exit
     else
-      puts "Invalid choice. Please choose a valid option."
+      puts CONFIG['invalid_choice_message']
     end
   end
 
   def run_menu
     loop do
+      puts CONFIG['menu_choice_prompt']
       display_menu
-      puts "Enter your choice (1-3): "
       choice = gets.to_i
       process_menu_choice(choice)
     end
+  end
+
+  def get_choices
+    @item.item_list
+  end
+
+  def format_choices
+    get_choices.join(' / ')
   end
 end
 
