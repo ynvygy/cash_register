@@ -1,6 +1,4 @@
 class Item
-  @@instance = nil
-
   def self.instance
     @@instance ||= new
   end

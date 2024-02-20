@@ -1,8 +1,4 @@
 class ItemDiscount
-  attr_reader :discounts
-
-  @@instance = nil
-
   def self.instance
     @@instance ||= new
   end
