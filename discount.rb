@@ -18,6 +18,8 @@ class Discount
     end
   end
 
+  private
+
   def buy_n_get_n_free
     get_number_of_sets * get_discounted_quantity.round(2) + get_number_of_leftovers * @item_price
   end

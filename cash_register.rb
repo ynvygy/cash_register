@@ -16,21 +16,30 @@ class CashRegister
   end
 
   def add_item
-    item = nil
-    loop do
-      puts format(CONFIG['choices_prompt'], choices: format_choices)
-      item = gets.chomp
-
-      break if get_choices.include?(item)
-
-      puts format(CONFIG['invalid_prompt'], choices: format_choices)
-    end
+    prompt_message = format(CONFIG['choices_prompt'], choices: format_choices)
+    invalid_prompt = format(CONFIG['invalid_prompt'], choices: format_choices)
+    item = get_valid_item(prompt_message, invalid_prompt)
 
     @items << item
 
     puts format(CONFIG['item_added_message'], item: item)
     puts format(CONFIG['current_items_message'], items: @items.join(', '))
   end
+
+  def show_total
+    puts format(CONFIG['total_message'], total: sprintf("%.2f", calculate_total))
+  end
+
+  def run_menu
+    loop do
+      puts CONFIG['menu_choice_prompt']
+      display_menu
+      choice = gets.to_i
+      process_menu_choice(choice)
+    end
+  end
+
+  private
 
   def calculate_total
     get_item_count.sum do |item, value|
@@ -40,10 +49,6 @@ class CashRegister
         Discount.new(discount, item_price, value).get_discount
       }
     end
-  end
-
-  def show_total
-    puts format(CONFIG['total_message'], total: sprintf("%.2f", calculate_total))
   end
 
   def get_item_count
@@ -75,21 +80,25 @@ class CashRegister
     end
   end
 
-  def run_menu
-    loop do
-      puts CONFIG['menu_choice_prompt']
-      display_menu
-      choice = gets.to_i
-      process_menu_choice(choice)
-    end
-  end
-
   def get_choices
     @item.item_list
   end
 
   def format_choices
     get_choices.join(' / ')
+  end
+
+  def get_valid_item(prompt_message, invalid_prompt)
+    item = nil
+    loop do
+      puts prompt_message
+      item = gets.chomp
+
+      break if get_choices.include?(item)
+  
+      puts invalid_prompt
+    end
+    item
   end
 end
 
