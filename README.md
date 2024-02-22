@@ -4,6 +4,13 @@ A simple cash register that allows a user to add items and show a total amount, 
 
 ## Usage
 
+# Commands
+
+- ruby cash_register.rb -> for running the cash register
+- bundle exec rspec -> for running the tests
+
+# Options
+
 1. Add item(s)
 2. Request to see a total
 3. Quit once the process is done
